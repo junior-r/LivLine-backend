@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  pk          String     @id @default(uuid())
+  name        String
+  lastName    String?
+  email       String     @unique
+  password    String
+  dateOfBirth DateTime?
+  sex         Sex?
+  bloodType   BloodType?
+  country     String?
+  city        String?
+  phone       String?
+  role        Role?      @default(patient)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  resetPassword     ResetPassword[]
+  allergies         Allergy[]
+  surgeries         Surgery[]
+  chronicConditions ChronicCondition[]
+  appointments      Appointment[]
+  medications       Medication[]
+  vaccines          Vaccine[]
+}
+
+model ResetPassword {
+  pk        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  token     String   @unique @default(uuid())
+  createdAt DateTime @default(now())
+  expiredAt DateTime
+  userId    String
+}
+
+model Allergy {
+  pk        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId    String
+  content   String?
+  notes     String?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Surgery {
+  pk          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId      String
+  description String?
+  date        DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+}
+
+model ChronicCondition {
+  pk            String    @id @default(uuid())
+  user          User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId        String
+  name          String?
+  diagnosisDate DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+}
+
+model Appointment {
+  pk              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId          String
+  reason          String?
+  diagnosis       String?
+  doctorName      String?
+  appointmentDate DateTime
+  notes           String?
+  createdAt       DateTime @default(now())
+}
+
+model Medication {
+  pk        String    @id @default(uuid())
+  user      User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId    String
+  name      String?
+  dosage    String?
+  frequency String?
+  startDate DateTime?
+  endDate   DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+}
+
+model Vaccine {
+  pk              String    @id @default(uuid())
+  user            User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId          String
+  name            String?
+  doseNumber      Int
+  vaccinationDate DateTime?
+  notes           String?
+  createdAt       DateTime  @default(now())
+}
+
+// Enums
+
+enum Sex {
+  M
+  F
+  O
+}
+
+enum BloodType {
+  A_POS // A+
+  A_NEG // A-
+  B_POS // B+
+  B_NEG // B-
+  AB_POS // AB+
+  AB_NEG // AB-
+  O_POS // O+
+  O_NEG // O-
+}
+
+enum Role {
+  admin
+  doctor
+  patient
+}
