@@ -1,5 +1,5 @@
 import { config } from '@/config'
-import { Prisma, PrismaClient, User } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { User as UserType } from '@/schemas/user'
 import bcrypt from 'bcryptjs'
 import {
@@ -9,21 +9,10 @@ import {
   ServerError,
   UnauthorizedError,
 } from '@/utils/errors'
+import { returnUserInfo } from '@/utils/returnUserInfo'
 
 const { SALT_ROUNDS } = config
 const prisma = new PrismaClient()
-
-const returnUserInfo = (user: User) => {
-  return {
-    pk: user.pk,
-    email: user.email,
-    name: user.name,
-    lastName: user.lastName,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    role: user.role,
-  }
-}
 
 export class AuthModel {
   static async create({ data }: { data: UserType }) {

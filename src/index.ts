@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import { createAuthRouter } from './routes/auth'
 import { authMiddleware } from './middlewares/auth'
 import { createUserRouter } from './routes/users'
+import { dashboardRouter } from './routes/dashboard'
 
 const { PORT } = config
 
@@ -22,6 +23,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api/auth', createAuthRouter())
 app.use('/api/users', createUserRouter())
+app.use('/api/dashboard', dashboardRouter())
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: 'Not Found' })

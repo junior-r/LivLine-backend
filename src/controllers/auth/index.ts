@@ -49,7 +49,7 @@ export class AuthController {
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         })
         .status(200)
-        .send({ user: user, message: 'Logged in successfully' })
+        .send({ user: user, message: 'Inicio de sesión exitoso' })
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })

@@ -2,6 +2,8 @@ import { config } from '../config'
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { PrismaClient } from '@prisma/client'
+import { UserRoleType } from '@/schemas/dashboard/user'
+import { getEnumKeyByLabel } from '@/utils/getEnumKeyByLabel'
 
 const { SECRET_JWT_KEY, SECRET_REFRESH_KEY, COOKIE_OPTIONS } = config
 const prisma = new PrismaClient()
@@ -67,7 +69,7 @@ export const requireRole = async (req: Request, res: Response, next: NextFunctio
       return
     }
 
-    if (user.role === 'admin') {
+    if (user.role === getEnumKeyByLabel(UserRoleType, UserRoleType.admin)) {
       return next()
     }
 
