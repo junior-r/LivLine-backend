@@ -70,26 +70,6 @@ model Allergy {
   patientDataPk String?
 }
 
-model Surgery {
-  pk            String       @id @default(uuid())
-  name          String
-  date          DateTime?
-  notes         String?
-  createdAt     DateTime     @default(now())
-  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
-  patientDataPk String?
-}
-
-model ChronicCondition {
-  pk            String       @id @default(uuid())
-  name          String
-  diagnosisDate DateTime?
-  notes         String?
-  createdAt     DateTime     @default(now())
-  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
-  patientDataPk String?
-}
-
 model Appointment {
   pk              String       @id @default(uuid())
   reason          String?
@@ -102,6 +82,16 @@ model Appointment {
   patientDataPk   String?
 }
 
+model ChronicCondition {
+  pk            String       @id @default(uuid())
+  name          String
+  diagnosisDate DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
+}
+
 model Medication {
   pk            String       @id @default(uuid())
   name          String
@@ -109,6 +99,16 @@ model Medication {
   frequency     String?
   startDate     DateTime?
   endDate       DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
+}
+
+model Surgery {
+  pk            String       @id @default(uuid())
+  name          String
+  date          DateTime?
   notes         String?
   createdAt     DateTime     @default(now())
   PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
