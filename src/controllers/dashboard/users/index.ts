@@ -2,6 +2,7 @@ import { DashboardUserModel } from '@/models/Dashboard/User'
 import { Request, Response } from 'express'
 import { AppError } from '@/utils/errors'
 import { validateUserCreation } from '@/schemas/dashboard/user'
+import { validateMedicalDataCreation } from '@/schemas/dashboard/medicalData'
 
 export class DashboardUserController {
   private model: typeof DashboardUserModel
@@ -22,14 +23,45 @@ export class DashboardUserController {
       const newObject = await this.model.create({ data: result.data })
       res.status(201).send({ user: newObject, message: 'Usuario creado correctamente' })
     } catch (error) {
-      console.log(error)
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
-        return
       }
       res.status(500).json({ error: 'Internal server error' })
-      return
     }
     return
+  }
+
+  createData = async (req: Request, res: Response) => {
+    try {
+      const { userPk } = req.params
+      const result = validateMedicalDataCreation(req.body)
+
+      if (!result.success || !result.data) {
+        res.status(400).json({ error: JSON.parse(result.error.message) })
+        return
+      }
+
+      const newMedicalData = await this.model.createMedicalData({ pk: userPk, data: result.data })
+      res.status(201).send({ data: newMedicalData, message: 'Datos médicos creados correctamente' })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message })
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+
+  getUser = async (req: Request, res: Response) => {
+    try {
+      const { userPk } = req.params
+
+      const [user, data] = await this.model.getUser({ pk: userPk })
+      res.status(200).send({ user: user, medicalData: data })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message })
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
   }
 }

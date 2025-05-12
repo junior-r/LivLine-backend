@@ -14,28 +14,17 @@ datasource db {
 }
 
 model User {
-  pk          String     @id @default(uuid())
-  name        String
-  lastName    String?
-  email       String     @unique
-  password    String
-  dateOfBirth DateTime?
-  sex         Sex?
-  bloodType   BloodType?
-  country     String?
-  city        String?
-  phone       String?
-  role        Role?      @default(patient)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  pk        String   @id @default(uuid())
+  name      String
+  lastName  String?
+  email     String   @unique
+  password  String
+  role      Role?    @default(patient)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  resetPassword     ResetPassword[]
-  allergies         Allergy[]
-  surgeries         Surgery[]
-  chronicConditions ChronicCondition[]
-  appointments      Appointment[]
-  medications       Medication[]
-  vaccines          Vaccine[]
+  resetPassword ResetPassword[]
+  patientData   PatientData[]
 }
 
 model ResetPassword {
@@ -47,70 +36,94 @@ model ResetPassword {
   userId    String
 }
 
+model PatientData {
+  pk                    String    @id @default(uuid())
+  user                  User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
+  userId                String    @unique
+  dateOfBirth           DateTime
+  sex                   Sex
+  bloodType             BloodType
+  country               String
+  city                  String
+  address               String
+  phone                 String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
+
+  allergies         Allergy[]
+  surgeries         Surgery[]
+  chronicConditions ChronicCondition[]
+  appointments      Appointment[]
+  medications       Medication[]
+  vaccines          Vaccine[]
+}
+
 model Allergy {
-  pk        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId    String
-  content   String?
-  notes     String?
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  pk            String          @id @default(uuid())
+  name          String
+  reaction      String
+  severity      AllergySeverity
+  notes         String?
+  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime        @default(now())
+  PatientData   PatientData?    @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
 }
 
 model Surgery {
-  pk          String    @id @default(uuid())
-  user        User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId      String
-  description String?
-  date        DateTime?
-  notes       String?
-  createdAt   DateTime  @default(now())
+  pk            String       @id @default(uuid())
+  name          String
+  date          DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
 }
 
 model ChronicCondition {
-  pk            String    @id @default(uuid())
-  user          User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId        String
-  name          String?
+  pk            String       @id @default(uuid())
+  name          String
   diagnosisDate DateTime?
   notes         String?
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime     @default(now())
+  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
 }
 
 model Appointment {
-  pk              String   @id @default(uuid())
-  user            User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId          String
+  pk              String       @id @default(uuid())
   reason          String?
   diagnosis       String?
   doctorName      String?
   appointmentDate DateTime
   notes           String?
-  createdAt       DateTime @default(now())
+  createdAt       DateTime     @default(now())
+  PatientData     PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk   String?
 }
 
 model Medication {
-  pk        String    @id @default(uuid())
-  user      User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId    String
-  name      String?
-  dosage    String?
-  frequency String?
-  startDate DateTime?
-  endDate   DateTime?
-  notes     String?
-  createdAt DateTime  @default(now())
+  pk            String       @id @default(uuid())
+  name          String
+  dosage        String
+  frequency     String?
+  startDate     DateTime?
+  endDate       DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  PatientData   PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk String?
 }
 
 model Vaccine {
-  pk              String    @id @default(uuid())
-  user            User      @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  userId          String
-  name            String?
+  pk              String       @id @default(uuid())
+  name            String
   doseNumber      Int
   vaccinationDate DateTime?
   notes           String?
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime     @default(now())
+  PatientData     PatientData? @relation(fields: [patientDataPk], references: [pk], onDelete: Cascade)
+  patientDataPk   String?
 }
 
 // Enums
@@ -130,6 +143,12 @@ enum BloodType {
   AB_NEG // AB-
   O_POS // O+
   O_NEG // O-
+}
+
+enum AllergySeverity {
+  Mild
+  Moderate
+  Severe
 }
 
 enum Role {

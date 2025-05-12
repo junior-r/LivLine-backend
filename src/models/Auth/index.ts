@@ -9,7 +9,6 @@ import {
   ServerError,
   UnauthorizedError,
 } from '@/utils/errors'
-import { returnUserInfo } from '@/utils/returnUserInfo'
 
 const { SALT_ROUNDS } = config
 const prisma = new PrismaClient()
@@ -48,12 +47,12 @@ export class AuthModel {
       })
       if (!user) throw new NotFoundError('Usuario no encontrado')
 
+      const { password, ...restData } = user
       if (checkPassword) {
-        const isValidPassword = await bcrypt.compare(checkPassword, user.password)
+        const isValidPassword = await bcrypt.compare(checkPassword, password)
         if (!isValidPassword) throw new UnauthorizedError('Contraseña incorrecta')
       }
-
-      return returnUserInfo(user)
+      return restData
     } catch (error) {
       if (error instanceof AppError) throw error
       throw new ServerError('Error al intentar obtener al usuario')

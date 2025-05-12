@@ -7,6 +7,8 @@ export const createDashboardUserRouter = () => {
   const usersController = new DashboardUserController({ model: DashboardUserModel })
 
   usersRouter.post('/', usersController.create)
+  usersRouter.post('/:userPk', usersController.createData)
+  usersRouter.get('/:userPk', usersController.getUser)
 
   return usersRouter
 }
