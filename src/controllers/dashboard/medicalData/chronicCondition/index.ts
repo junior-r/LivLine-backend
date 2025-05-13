@@ -32,4 +32,19 @@ export class DashboardChronicConditionController {
     }
     return
   }
+
+  delete = async (req: Request, res: Response) => {
+    const { pk } = req.params
+
+    try {
+      const deletedObject = await this.model.delete({ pk })
+      res.send({ condition: deletedObject, message: 'Condición crónica eliminada correctamente' })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message })
+        return
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
 }

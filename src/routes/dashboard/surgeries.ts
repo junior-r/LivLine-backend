@@ -7,6 +7,7 @@ export const createDashboardSurgeriesRouter = () => {
   const controller = new DashboardSurgeryController({ model: SurgeryModel })
 
   router.post('/:patientDataPk', controller.create)
+  router.delete('/:pk', controller.delete)
 
   return router
 }

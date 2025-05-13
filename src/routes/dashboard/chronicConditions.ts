@@ -7,6 +7,7 @@ export const createDashboardChronicConditionRouter = () => {
   const controller = new DashboardChronicConditionController({ model: ChronicConditionModel })
 
   router.post('/:patientDataPk', controller.create)
+  router.delete('/:pk', controller.delete)
 
   return router
 }

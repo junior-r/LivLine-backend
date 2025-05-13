@@ -7,6 +7,7 @@ export const createDashboardAllergyRouter = () => {
   const controller = new DashboardAllergyController({ model: AllergyModel })
 
   router.post('/:patientDataPk', controller.create)
+  router.delete('/:pk', controller.delete)
 
   return router
 }
