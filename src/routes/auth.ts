@@ -4,22 +4,22 @@ import { AuthController } from '@/controllers/auth'
 import { requireAuth } from '@/middlewares/auth'
 
 export const createAuthRouter = () => {
-  const authRouter = Router()
-  const authController = new AuthController({ model: AuthModel })
+  const router = Router()
+  const controller = new AuthController({ model: AuthModel })
 
-  authRouter.get('/', (_req, res) => {
+  router.get('/', (_req, res) => {
     res.send('Auth route')
   })
 
-  authRouter.post('/login', authController.login)
+  router.post('/login', controller.login)
 
-  authRouter.post('/register', authController.create)
+  router.post('/register', controller.create)
 
-  // authRouter.post('/reset-password', authController.resetPassword)
+  // router.post('/reset-password', controller.resetPassword)
 
-  // authRouter.post('/reset-password/confirm/:token', authController.resetPasswordConfirm)
+  // router.post('/reset-password/confirm/:token', controller.resetPasswordConfirm)
 
-  authRouter.post('/logout', requireAuth, authController.logout)
+  router.post('/logout', requireAuth, controller.logout)
 
-  return authRouter
+  return router
 }

@@ -1,3 +1,4 @@
+import { zEnumFromObject } from '@/utils/zEnumFromObject'
 import { z } from 'zod'
 
 export const UserRoleType = {
@@ -5,10 +6,6 @@ export const UserRoleType = {
   doctor: 'Doctor',
   patient: 'Paciente',
 } as const
-
-function zEnumFromObject<T extends Record<string, string>>(obj: T) {
-  return z.enum(Object.keys(obj) as [keyof T & string, ...(keyof T & string)[]])
-}
 
 export const UserCreateSchema = z.object({
   name: z.string().min(3, { message: 'Este dato es requerido' }),

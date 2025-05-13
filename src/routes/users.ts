@@ -4,18 +4,18 @@ import { UserModel } from '@/models/User'
 import { Router } from 'express'
 
 export const createUserRouter = () => {
-  const usersRouter = Router()
-  const userController = new UserController({ model: UserModel })
+  const router = Router()
+  const controller = new UserController({ model: UserModel })
 
-  usersRouter.use(requireAuth)
+  router.use(requireAuth)
 
-  usersRouter.get('/', requireRole, userController.getAll)
+  router.get('/', requireRole, controller.getAll)
 
-  usersRouter.get('/me', userController.getCurrentUser)
+  router.get('/me', controller.getCurrentUser)
 
-  usersRouter.get('/:pk', userController.getUser)
+  router.get('/:pk', controller.getUser)
 
-  usersRouter.patch('/:pk', userController.update)
+  router.patch('/:pk', controller.update)
 
-  return usersRouter
+  return router
 }

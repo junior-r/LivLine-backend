@@ -1,14 +1,26 @@
 import { requireAuth, requireRole } from '@/middlewares/auth'
 import { Router } from 'express'
 import { createDashboardUserRouter } from './users'
+import { createDashboardAllergyRouter } from './allergies'
+import { createDashboardAppointmentsRouter } from './appointments'
+import { createDashboardSurgeriesRouter } from './surgeries'
+import { createDashboardChronicConditionRouter } from './chronicConditions'
+import { createDashboardMedicationsRouter } from './medications'
+import { createDashboardVaccinesRouter } from './vaccines'
 
 export const dashboardRouter = () => {
-  const dashboardRouter = Router()
+  const router = Router()
 
-  dashboardRouter.use(requireAuth)
-  dashboardRouter.use(requireRole)
+  router.use(requireAuth)
+  router.use(requireRole)
 
-  dashboardRouter.use('/users', createDashboardUserRouter())
+  router.use('/users', createDashboardUserRouter())
+  router.use('/allergies', createDashboardAllergyRouter())
+  router.use('/appointments', createDashboardAppointmentsRouter())
+  router.use('/surgeries', createDashboardSurgeriesRouter())
+  router.use('/chronicConditions', createDashboardChronicConditionRouter())
+  router.use('/medications', createDashboardMedicationsRouter())
+  router.use('/vaccines', createDashboardVaccinesRouter())
 
-  return dashboardRouter
+  return router
 }

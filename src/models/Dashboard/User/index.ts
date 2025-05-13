@@ -55,12 +55,24 @@ export class DashboardUserModel {
       const patientData = await prisma.patientData.findUnique({
         where: { userId: object.pk },
         include: {
-          allergies: true,
-          surgeries: true,
-          chronicConditions: true,
-          appointments: true,
-          medications: true,
-          vaccines: true,
+          allergies: {
+            orderBy: [{ createdAt: 'desc' }, { updatedAt: 'desc' }],
+          },
+          surgeries: {
+            orderBy: [{ createdAt: 'desc' }],
+          },
+          chronicConditions: {
+            orderBy: [{ createdAt: 'desc' }],
+          },
+          appointments: {
+            orderBy: [{ createdAt: 'desc' }],
+          },
+          medications: {
+            orderBy: [{ createdAt: 'desc' }],
+          },
+          vaccines: {
+            orderBy: [{ createdAt: 'desc' }],
+          },
         },
       })
       return [object, patientData]
