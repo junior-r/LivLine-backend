@@ -7,6 +7,7 @@ import { createDashboardSurgeriesRouter } from './surgeries'
 import { createDashboardChronicConditionRouter } from './chronicConditions'
 import { createDashboardMedicationsRouter } from './medications'
 import { createDashboardVaccinesRouter } from './vaccines'
+import { createDashboardStatsRouter } from './stats'
 
 export const dashboardRouter = () => {
   const router = Router()
@@ -21,6 +22,7 @@ export const dashboardRouter = () => {
   router.use('/chronicConditions', createDashboardChronicConditionRouter())
   router.use('/medications', createDashboardMedicationsRouter())
   router.use('/vaccines', createDashboardVaccinesRouter())
+  router.use('/stats', createDashboardStatsRouter())
 
   return router
 }
