@@ -1,7 +1,7 @@
 import { UserModel } from '@/models/User'
 import { validateChangePassword, validatePartialUser } from '@/schemas/user'
 import { AppError, UnauthorizedError, ValidationError } from '@/utils/errors'
-// import { logoutUser } from '@/utils/logoutUser'
+import { logoutUser } from '@/utils/logoutUser'
 import { validatePasswords } from '@/utils/validatePasswords'
 import { Request, Response } from 'express'
 
@@ -129,10 +129,9 @@ export class UserController {
       if (currentPassword === password)
         throw new ValidationError('La nueva contraseña no puede ser igual a la actual')
 
-      const object = await this.model.changePassword({ pk, data: result.data })
+      await this.model.changePassword({ pk, data: result.data })
 
-      res.status(200).send({ user: object, message: 'Información actualizada correctamente' })
-      return
+      logoutUser(req, res, 'Sesión cerrada correctamente')
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })

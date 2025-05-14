@@ -19,7 +19,9 @@ export const createUserRouter = () => {
 
   router.patch('/:pk', controller.update)
 
-  // router.patch('/change-password/:pk', controller.changePassword)
+  router.patch('/change-password/:pk', async (req, res) => {
+    return controller.changePassword(req, res)
+  })
 
   return router
 }
