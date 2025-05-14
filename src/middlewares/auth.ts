@@ -10,6 +10,8 @@ const prisma = new PrismaClient()
 type dataToEncrypt = { pk: string; email: string; role: string } | null
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  if (req.method === 'OPTIONS') return next()
+
   const token = req.cookies.access_token
   const refreshToken = req.cookies.refresh_token
 

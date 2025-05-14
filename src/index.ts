@@ -13,8 +13,8 @@ const { PORT } = config
 const app = express()
 
 app.disable('x-powered-by')
-app.use(express.json())
 app.use(corsMiddleware())
+app.use(express.json())
 app.use(cookieParser())
 app.use((req, res, next) => authMiddleware(req, res, next))
 
