@@ -9,15 +9,17 @@ export const createUserRouter = () => {
 
   router.get('/get-user-by-email-or-pk/:query', controller.getUserByEmailPkOrId)
 
-  // router.use(requireAuth)
+  router.use(requireAuth)
 
   router.get('/', requireRole, controller.getAll)
 
-  router.get('/me', requireAuth, controller.getCurrentUser)
+  router.get('/me', controller.getCurrentUser)
 
-  router.get('/:pk', requireAuth, controller.getUser)
+  router.get('/:pk', controller.getUser)
 
-  router.patch('/:pk', requireAuth, controller.update)
+  router.patch('/:pk', controller.update)
+
+  // router.patch('/change-password/:pk', controller.changePassword)
 
   return router
 }

@@ -1,11 +1,12 @@
-import { UserUpdate } from '@/schemas/user'
+import { UserChangePassword, UserUpdate } from '@/schemas/user'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { config } from '@/config'
 import { getDataForUpdate } from '@/utils/getDataForUpdate'
-import { AppError, NotFoundError, ServerError } from '@/utils/errors'
+import { AppError, NotFoundError, ServerError, ValidationError } from '@/utils/errors'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
-const { ITEMS_PER_PAGE } = config
+const { ITEMS_PER_PAGE, SALT_ROUNDS } = config
 
 export class UserModel {
   static async getAll(params?: { page?: number; search?: string }) {
@@ -97,6 +98,30 @@ export class UserModel {
     } catch (error) {
       if (error instanceof AppError) throw error
       throw new ServerError('Error al intentar actualizar el usuario')
+    }
+  }
+
+  static async changePassword({ pk, data }: { pk: string; data: UserChangePassword }) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { pk },
+      })
+      if (!user) throw new NotFoundError('Usuario no encontrado')
+
+      const isValidPassword = await bcrypt.compare(data.currentPassword, user.password)
+      if (!isValidPassword) throw new ValidationError('Contraseña incorrecta')
+
+      const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS)
+      const userChanged = await prisma.user.update({
+        where: { pk: user.pk },
+        data: { password: hashedPassword },
+        omit: { password: true },
+      })
+
+      return userChanged
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al intentar cambiar la contraseña')
     }
   }
 }
