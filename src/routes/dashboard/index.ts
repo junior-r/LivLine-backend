@@ -12,10 +12,11 @@ import { createDashboardStatsRouter } from './stats'
 export const dashboardRouter = () => {
   const router = Router()
 
+  router.use('/users', createDashboardUserRouter())
+
   router.use(requireAuth)
   router.use(requireRole)
 
-  router.use('/users', createDashboardUserRouter())
   router.use('/allergies', createDashboardAllergyRouter())
   router.use('/appointments', createDashboardAppointmentsRouter())
   router.use('/surgeries', createDashboardSurgeriesRouter())

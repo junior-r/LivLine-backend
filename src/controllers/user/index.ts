@@ -69,6 +69,20 @@ export class UserController {
     }
   }
 
+  getUserByEmailOrPk = async (req: Request, res: Response) => {
+    try {
+      const { query } = req.params
+
+      const pk = await this.model.getByEmailOrPk({ query })
+      res.status(200).send({ user: pk })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message, statusCode: error.statusCode })
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+
   update = async (req: Request, res: Response) => {
     const { pk } = req.params
     const { user: currentUser } = req

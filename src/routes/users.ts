@@ -6,16 +6,19 @@ import { Router } from 'express'
 export const createUserRouter = () => {
   const router = Router()
   const controller = new UserController({ model: UserModel })
+  console.log('user router')
 
-  router.use(requireAuth)
+  router.get('/get-user-by-email-or-pk/:query', controller.getUserByEmailOrPk)
+
+  // router.use(requireAuth)
 
   router.get('/', requireRole, controller.getAll)
 
-  router.get('/me', controller.getCurrentUser)
+  router.get('/me', requireAuth, controller.getCurrentUser)
 
-  router.get('/:pk', controller.getUser)
+  router.get('/:pk', requireAuth, controller.getUser)
 
-  router.patch('/:pk', controller.update)
+  router.patch('/:pk', requireAuth, controller.update)
 
   return router
 }

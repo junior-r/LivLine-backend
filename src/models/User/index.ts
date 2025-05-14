@@ -62,6 +62,24 @@ export class UserModel {
     }
   }
 
+  static async getByEmailOrPk({ query }: { query: string }) {
+    try {
+      const whereClause: Prisma.UserWhereInput = {
+        OR: [{ email: { equals: query, mode: 'insensitive' } }, { pk: { equals: query } }],
+      }
+
+      const pk = await prisma.user.findFirst({
+        where: whereClause,
+        select: { pk: true },
+      })
+      if (!pk) throw new NotFoundError('Usuario no encontrado')
+      return pk
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al intentar obtener el usuario')
+    }
+  }
+
   static async update({ pk, data }: { pk: string; data: Partial<UserUpdate> }) {
     const newData = getDataForUpdate(data)
 
