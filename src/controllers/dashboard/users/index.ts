@@ -2,7 +2,10 @@ import { DashboardUserModel } from '@/models/Dashboard/User'
 import { Request, Response } from 'express'
 import { AppError } from '@/utils/errors'
 import { validateUserCreation } from '@/schemas/dashboard/user'
-import { validateMedicalDataCreation } from '@/schemas/dashboard/medicalData'
+import {
+  validateMedicalDataCreation,
+  validateMedicalDataEdition,
+} from '@/schemas/dashboard/medicalData'
 
 export class DashboardUserController {
   private model: typeof DashboardUserModel
@@ -31,6 +34,20 @@ export class DashboardUserController {
     return
   }
 
+  getUser = async (req: Request, res: Response) => {
+    try {
+      const { userPk } = req.params
+
+      const [user, data] = await this.model.getUser({ pk: userPk })
+      res.status(200).send({ user: user, medicalData: data })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message })
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+
   createData = async (req: Request, res: Response) => {
     try {
       const { userPk } = req.params
@@ -51,12 +68,22 @@ export class DashboardUserController {
     }
   }
 
-  getUser = async (req: Request, res: Response) => {
+  updateData = async (req: Request, res: Response) => {
     try {
-      const { userPk } = req.params
+      const { dataPk } = req.params
+      const data = req.body
+      const result = validateMedicalDataEdition(data)
 
-      const [user, data] = await this.model.getUser({ pk: userPk })
-      res.status(200).send({ user: user, medicalData: data })
+      if (!result.success) {
+        res.status(400).json({ error: JSON.parse(result.error.message) })
+        return
+      }
+
+      const updatedObject = await this.model.updateMedicalData({ pk: dataPk, data: result.data })
+
+      res
+        .status(200)
+        .send({ data: updatedObject, message: 'Información actualizada correctamente' })
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })

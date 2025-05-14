@@ -14,6 +14,7 @@ export const createDashboardUserRouter = () => {
 
   router.post('/', controller.create)
   router.post('/:userPk', controller.createData)
+  router.put('/:dataPk', controller.updateData)
 
   return router
 }

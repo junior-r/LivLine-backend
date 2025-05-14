@@ -4,7 +4,14 @@ import { AppError, ConflictError, NotFoundError, ServerError } from '@/utils/err
 import { UserCreateType } from '@/schemas/dashboard/user'
 import bcrypt from 'bcryptjs'
 import { generateSecurePassword } from '@/utils/generateSecurePassword'
-import { UserMedicalDataType } from '@/schemas/dashboard/medicalData'
+import {
+  MedicalDataType,
+  MedicalDataUpdateType,
+  UserBloodTypeOptions,
+  UserSexOptions,
+} from '@/schemas/dashboard/medicalData'
+import { getEnumKeyByLabel } from '@/utils/getEnumKeyByLabel'
+import { getDataForUpdate } from '@/utils/getDataForUpdate'
 
 const prisma = new PrismaClient()
 const { SALT_ROUNDS, PASSWORDS_CHARSET } = config
@@ -28,21 +35,6 @@ export class DashboardUserModel {
           throw new ConflictError('El usuario ya existe')
         }
       }
-      if (error instanceof AppError) throw error
-      throw new ServerError('Error al intentar crear usuario')
-    }
-  }
-
-  static async createMedicalData({ pk, data }: { pk: string; data: UserMedicalDataType }) {
-    try {
-      const newObject = await prisma.patientData.create({
-        data: {
-          ...data,
-          user: { connect: { pk } },
-        },
-      })
-      return newObject
-    } catch (error) {
       if (error instanceof AppError) throw error
       throw new ServerError('Error al intentar crear usuario')
     }
@@ -79,6 +71,41 @@ export class DashboardUserModel {
     } catch (error) {
       if (error instanceof AppError) throw error
       throw new ServerError('Error al intentar crear usuario')
+    }
+  }
+
+  static async createMedicalData({ pk, data }: { pk: string; data: MedicalDataType }) {
+    try {
+      const newObject = await prisma.patientData.create({
+        data: {
+          ...data,
+          sex: getEnumKeyByLabel(UserSexOptions, data.sex),
+          bloodType: getEnumKeyByLabel(UserBloodTypeOptions, data.bloodType),
+          user: { connect: { pk } },
+        },
+      })
+      return newObject
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al intentar crear usuario')
+    }
+  }
+
+  static async updateMedicalData({ pk, data }: { pk: string; data: MedicalDataUpdateType }) {
+    const newData = getDataForUpdate(data)
+    try {
+      const getObject = await prisma.patientData.findUnique({ where: { pk } })
+      if (!getObject) throw new NotFoundError('Información no encontrada')
+
+      const updated = await prisma.patientData.update({
+        where: { pk: getObject.pk },
+        data: newData,
+      })
+
+      return updated
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al intentar actualizar la información')
     }
   }
 }
