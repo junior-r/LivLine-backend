@@ -11,6 +11,7 @@
     "db:migrate": "pnpx prisma migrate dev",
     "db:studio": "pnpx prisma studio",
     "db:reset": "pnpx prisma migrate reset && pnpx prisma migrate dev",
+    "db:migrate:deploy": "pnpx prisma migrate deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
