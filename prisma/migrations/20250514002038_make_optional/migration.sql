@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "idDocType" DROP NOT NULL,
+ALTER COLUMN "idNumber" DROP NOT NULL;

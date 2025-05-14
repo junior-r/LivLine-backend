@@ -6,9 +6,8 @@ import { Router } from 'express'
 export const createUserRouter = () => {
   const router = Router()
   const controller = new UserController({ model: UserModel })
-  console.log('user router')
 
-  router.get('/get-user-by-email-or-pk/:query', controller.getUserByEmailOrPk)
+  router.get('/get-user-by-email-or-pk/:query', controller.getUserByEmailPkOrId)
 
   // router.use(requireAuth)
 

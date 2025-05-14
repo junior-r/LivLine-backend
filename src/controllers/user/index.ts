@@ -69,11 +69,11 @@ export class UserController {
     }
   }
 
-  getUserByEmailOrPk = async (req: Request, res: Response) => {
+  getUserByEmailPkOrId = async (req: Request, res: Response) => {
     try {
       const { query } = req.params
 
-      const pk = await this.model.getByEmailOrPk({ query })
+      const pk = await this.model.getByEmailPkOrId({ query })
       res.status(200).send({ user: pk })
     } catch (error) {
       if (error instanceof AppError) {

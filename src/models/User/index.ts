@@ -62,10 +62,14 @@ export class UserModel {
     }
   }
 
-  static async getByEmailOrPk({ query }: { query: string }) {
+  static async getByEmailPkOrId({ query }: { query: string }) {
     try {
       const whereClause: Prisma.UserWhereInput = {
-        OR: [{ email: { equals: query, mode: 'insensitive' } }, { pk: { equals: query } }],
+        OR: [
+          { email: { equals: query, mode: 'insensitive' } },
+          { pk: { equals: query } },
+          { idNumber: { equals: query } },
+        ],
       }
 
       const pk = await prisma.user.findFirst({
