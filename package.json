@@ -13,6 +13,9 @@
     "db:reset": "pnpx prisma migrate reset && pnpx prisma migrate dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "_moduleAliases": {
+    "@": "build"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -27,6 +30,7 @@
     "dotenv": "16.5.0",
     "express": "5.1.0",
     "jsonwebtoken": "9.0.2",
+    "module-alias": "2.2.3",
     "slugify": "1.6.6",
     "zod": "3.24.4"
   },

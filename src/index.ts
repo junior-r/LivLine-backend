@@ -1,3 +1,4 @@
+import 'module-alias/register'
 import express from 'express'
 import { config } from './config'
 import { corsMiddleware } from './middlewares/cors'
