@@ -13,6 +13,7 @@ export const createDashboardUserRouter = () => {
   router.use(requireRole)
 
   router.post('/', controller.create)
+  router.patch('/:pk', controller.update)
   router.post('/:userPk', controller.createData)
   router.put('/:dataPk', controller.updateData)
 

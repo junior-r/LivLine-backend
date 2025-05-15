@@ -21,8 +21,15 @@ export const UserCreateSchema = z.object({
   idNumber: z.string().min(3, { message: 'Este dato es requerido' }),
 })
 
+export const UserUpdateSchema = UserCreateSchema.partial()
+
 export type UserCreateType = z.infer<typeof UserCreateSchema>
+export type UserUpdateType = z.infer<typeof UserUpdateSchema>
 
 export const validateUserCreation = (data: UserCreateType) => {
   return UserCreateSchema.safeParse(data)
+}
+
+export const validateUserUpdate = (data: UserUpdateType) => {
+  return UserUpdateSchema.safeParse(data)
 }

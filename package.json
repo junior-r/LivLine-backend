@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "dev": "ts-node-dev -r tsconfig-paths/register -r ./_moduleAliases.js ./src/index.ts",
-    "start": "node -r ./build/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts",
+    "start": "node ./build/index.js",
     "lint": "eslint",
     "db:migrate": "pnpx prisma migrate dev",
     "db:studio": "pnpx prisma studio",
