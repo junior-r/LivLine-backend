@@ -108,7 +108,7 @@ export class AuthController {
 
       const userFullName = `${user.name} ${user.lastName}`
       const resetCode = await this.model.resetPasswordCreate({ userEmail: user.email })
-      const resetLink = `${FRONTEND_URL}/auth/reset-password-code/`
+      const resetLink = `${FRONTEND_URL}/auth/reset-password-validate/`
       const templatePath = resolveTemplatePath('templates/reset-password.ejs')
 
       const html = await ejs.renderFile(templatePath, {
