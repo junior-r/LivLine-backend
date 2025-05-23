@@ -8,7 +8,9 @@ import {
   NotFoundError,
   ServerError,
   UnauthorizedError,
+  ValidationError,
 } from '@/utils/errors'
+import crypto from 'node:crypto'
 
 const { SALT_ROUNDS } = config
 const prisma = new PrismaClient()
@@ -56,6 +58,63 @@ export class AuthModel {
     } catch (error) {
       if (error instanceof AppError) throw error
       throw new ServerError('Error al intentar obtener al usuario')
+    }
+  }
+
+  static async resetPasswordCreate({ userEmail }: { userEmail: string }) {
+    try {
+      const newResetCode = 'RSC-' + crypto.randomBytes(4).toString('hex').toUpperCase()
+      const newObject = await prisma.resetPassword.create({
+        data: {
+          code: newResetCode,
+          expiredAt: new Date(Date.now() + 1000 * 60 * 20), // 20 minutes
+          user: { connect: { email: userEmail } },
+        },
+      })
+
+      return newObject
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al crear el código de seguridad para el reset de la contraseña')
+    }
+  }
+
+  static async resetPasswordValidate({ code }: { code: string }) {
+    try {
+      const resetCode = await prisma.resetPassword.findUnique({
+        where: { code },
+        include: { user: { omit: { password: true } } },
+      })
+      if (!resetCode) throw new NotFoundError('Código de seguridad no encontrado')
+      if (resetCode.isUsed) throw new ValidationError('Código de seguridad ya utilizado')
+      if (resetCode.expiredAt < new Date())
+        throw new UnauthorizedError('Código de seguridad expirado')
+
+      return resetCode
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError(
+        'Error al validar el código de seguridad para el reset de la contraseña',
+      )
+    }
+  }
+
+  static async resetPasswordConfirm({ code, newPassword }: { code: string; newPassword: string }) {
+    try {
+      const resetCode = await prisma.resetPassword.update({
+        where: { code },
+        data: { isUsed: true },
+      })
+
+      const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS)
+      return await prisma.user.update({
+        where: { pk: resetCode.userId },
+        data: { password: hashedPassword },
+        omit: { password: true },
+      })
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al resetear la contraseña')
     }
   }
 }

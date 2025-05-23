@@ -33,7 +33,8 @@ model User {
 model ResetPassword {
   pk        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [pk], onDelete: Cascade)
-  token     String   @unique @default(uuid())
+  code      String   @unique
+  isUsed    Boolean  @default(false)
   createdAt DateTime @default(now())
   expiredAt DateTime
   userId    String

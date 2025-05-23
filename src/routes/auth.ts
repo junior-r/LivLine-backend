@@ -15,9 +15,11 @@ export const createAuthRouter = () => {
 
   router.post('/register', controller.create)
 
-  // router.post('/reset-password', controller.resetPassword)
+  router.post('/reset-password-send', controller.resetPasswordSend)
 
-  // router.post('/reset-password/confirm/:token', controller.resetPasswordConfirm)
+  router.post('/reset-password-validate', controller.resetPasswordValidate)
+
+  router.patch('/reset-password-confirm/:code', controller.resetPasswordConfirm)
 
   router.post('/logout', requireAuth, controller.logout)
 
