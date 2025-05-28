@@ -1,23 +1,12 @@
-import { zEnumFromObject } from '@/utils/zEnumFromObject'
+import { IdType, Role } from '@prisma/client'
 import { z } from 'zod'
-
-export const UserRoleType = {
-  admin: 'Admin',
-  doctor: 'Doctor',
-  patient: 'Paciente',
-} as const
-
-export const UserIdType = {
-  IdenityCard: 'Tarjeta de identidad',
-  DNI: 'Cédula de ciudadanía',
-} as const
 
 export const UserCreateSchema = z.object({
   name: z.string().min(3, { message: 'Este dato es requerido' }),
   lastName: z.string().min(3, { message: 'Este dato es requerido' }),
   email: z.string().email(),
-  role: zEnumFromObject(UserRoleType),
-  idDocType: zEnumFromObject(UserIdType),
+  role: z.nativeEnum(Role),
+  idDocType: z.nativeEnum(IdType),
   idNumber: z.string().min(3, { message: 'Este dato es requerido' }),
 })
 

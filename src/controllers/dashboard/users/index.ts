@@ -23,6 +23,7 @@ export class DashboardUserController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Internal server error' })
     }
@@ -42,6 +43,7 @@ export class DashboardUserController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Internal server error' })
     }
@@ -87,8 +89,10 @@ export class DashboardUserController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Internal server error' })
+      return
     }
   }
 
@@ -111,6 +115,7 @@ export class DashboardUserController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Internal server error' })
     }

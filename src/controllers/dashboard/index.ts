@@ -16,6 +16,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -28,6 +29,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -44,6 +46,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -56,6 +59,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -68,6 +72,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -80,6 +85,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -92,6 +98,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }
@@ -104,6 +111,7 @@ export class DashboardController {
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message })
+        return
       }
       res.status(500).json({ error: 'Error interno del servidor' })
     }

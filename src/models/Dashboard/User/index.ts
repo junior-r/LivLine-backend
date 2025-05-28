@@ -4,13 +4,7 @@ import { AppError, ConflictError, NotFoundError, ServerError } from '@/utils/err
 import { UserCreateType, UserUpdateType } from '@/schemas/dashboard/user'
 import bcrypt from 'bcryptjs'
 import { generateSecurePassword } from '@/utils/generateSecurePassword'
-import {
-  MedicalDataType,
-  MedicalDataUpdateType,
-  UserBloodTypeOptions,
-  UserSexOptions,
-} from '@/schemas/dashboard/medicalData'
-import { getEnumKeyByLabel } from '@/utils/getEnumKeyByLabel'
+import { MedicalDataType, MedicalDataUpdateType } from '@/schemas/dashboard/medicalData'
 import { getDataForUpdate } from '@/utils/getDataForUpdate'
 
 const prisma = new PrismaClient()
@@ -97,8 +91,6 @@ export class DashboardUserModel {
       const newObject = await prisma.patientData.create({
         data: {
           ...data,
-          sex: getEnumKeyByLabel(UserSexOptions, data.sex),
-          bloodType: getEnumKeyByLabel(UserBloodTypeOptions, data.bloodType),
           user: { connect: { pk } },
         },
       })
