@@ -7,7 +7,8 @@ export const createUserRouter = () => {
   const router = Router()
   const controller = new UserController({ model: UserModel })
 
-  router.get('/get-user-by-email-or-pk/:query', controller.getUserByEmailPkOrId)
+  router.post('/get-user-by-email-or-pk', controller.getUserByEmailPkOrId)
+  router.post('/verify-user-id/:pk/', controller.verifyIdNumber)
 
   router.use(requireAuth)
 

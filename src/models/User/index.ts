@@ -124,4 +124,22 @@ export class UserModel {
       throw new ServerError('Error al intentar cambiar la contraseña')
     }
   }
+
+  static async verifyIdNumber({ pk, idNumber }: { pk: string; idNumber: string }) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { pk },
+        select: { idNumber: true },
+      })
+
+      if (!user) throw new NotFoundError('Usuario no encontrado')
+      if (user.idNumber !== idNumber)
+        throw new ValidationError('Número de identificación incorrecto')
+
+      return { pk, valid: true }
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new ServerError('Error al verificar número de identificación')
+    }
+  }
 }

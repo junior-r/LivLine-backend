@@ -73,13 +73,31 @@ export class UserController {
 
   getUserByEmailPkOrId = async (req: Request, res: Response) => {
     try {
-      const { query } = req.params
+      const { query } = req.body
 
       const pk = await this.model.getByEmailPkOrId({ query })
       res.status(200).send({ user: pk })
     } catch (error) {
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message, statusCode: error.statusCode })
+      }
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+
+  verifyIdNumber = async (req: Request, res: Response) => {
+    try {
+      const { pk } = req.params
+      const { idNumber } = req.body
+
+      if (!idNumber) throw new ValidationError('El número de identificación es requerido')
+
+      const user = await this.model.verifyIdNumber({ pk, idNumber })
+      res.status(200).send({ user })
+    } catch (error) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message, statusCode: error.statusCode })
+        return
       }
       res.status(500).json({ error: 'Internal server error' })
     }
