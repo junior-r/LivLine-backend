@@ -7,6 +7,7 @@ import { createAuthRouter } from './routes/auth'
 import { authMiddleware } from './middlewares/auth'
 import { createUserRouter } from './routes/users'
 import { dashboardRouter } from './routes/dashboard'
+import { contactRouter } from './routes/contacts'
 
 const { PORT } = config
 
@@ -21,6 +22,8 @@ app.use((req, res, next) => authMiddleware(req, res, next))
 app.get('/', (_req, res) => {
   res.send('Hello World!')
 })
+
+app.use('/api/contacts', contactRouter())
 
 app.use('/api/auth', createAuthRouter())
 app.use('/api/users', createUserRouter())

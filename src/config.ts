@@ -9,6 +9,8 @@ interface Config {
   PASSWORDS_CHARSET: string
   SECRET_JWT_KEY: string
   SECRET_REFRESH_KEY: string
+  TURNSTILE_SECRET_KEY: string
+  EMAIL_FROM: string
   EMAIL_USER: string
   EMAIL_PASSWORD: string
   FRONTEND_URL: string
@@ -29,7 +31,9 @@ export const config: Config = {
   ITEMS_PER_PAGE: Number(process.env.ITEMS_PER_PAGE) || 10,
   SECRET_JWT_KEY: process.env.SECRET_JWT_KEY as string,
   SECRET_REFRESH_KEY: process.env.SECRET_REFRESH_KEY as string,
+  TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY as string,
   FRONTEND_URL: process.env.FRONTEND_URL as string,
+  EMAIL_FROM: process.env.EMAIL_FROM as string,
   EMAIL_USER: process.env.EMAIL_USER as string,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
   EMAIL_HOST: process.env.EMAIL_HOST as string,
