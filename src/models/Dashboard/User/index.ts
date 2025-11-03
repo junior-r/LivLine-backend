@@ -28,7 +28,7 @@ export class DashboardUserModel {
             orderBy: [{ createdAt: 'desc' }],
           },
           appointments: {
-            orderBy: [{ createdAt: 'desc' }],
+            orderBy: [{ createdAt: 'desc' }, { appointmentDate: 'desc' }],
           },
           medications: {
             orderBy: [{ createdAt: 'desc' }],
