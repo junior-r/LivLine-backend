@@ -23,11 +23,11 @@ app.get('/', (_req, res) => {
   res.send('Hello World!')
 })
 
-app.use('/api/contacts', contactRouter())
+app.use('/contacts', contactRouter())
 
-app.use('/api/auth', createAuthRouter())
-app.use('/api/users', createUserRouter())
-app.use('/api/dashboard', dashboardRouter())
+app.use('/auth', createAuthRouter())
+app.use('/users', createUserRouter())
+app.use('/dashboard', dashboardRouter())
 
 app.use((_req, res, _next) => {
   res.status(404).json({ error: 'Not Found' })

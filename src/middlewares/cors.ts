@@ -1,6 +1,11 @@
 import cors from 'cors'
 
-const ACCEPTED_ORIGINS = ['http://localhost:5173', 'https://liv-line-frontend.vercel.app']
+const ACCEPTED_ORIGINS = [
+  'http://localhost:5173',
+  'https://liv-line-frontend.vercel.app',
+  'https://livline.org',
+  'https://www.livline.org',
+]
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) =>
   cors({
