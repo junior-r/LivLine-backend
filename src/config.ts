@@ -10,6 +10,7 @@ interface Config {
   SECRET_JWT_KEY: string
   SECRET_REFRESH_KEY: string
   TURNSTILE_SECRET_KEY: string
+  RESEND_API_KEY: string
   EMAIL_FROM: string
   EMAIL_USER: string
   EMAIL_PASSWORD: string
@@ -32,6 +33,7 @@ export const config: Config = {
   SECRET_JWT_KEY: process.env.SECRET_JWT_KEY as string,
   SECRET_REFRESH_KEY: process.env.SECRET_REFRESH_KEY as string,
   TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY as string,
+  RESEND_API_KEY: process.env.RESEND_API_KEY as string,
   FRONTEND_URL: process.env.FRONTEND_URL as string,
   EMAIL_FROM: process.env.EMAIL_FROM as string,
   EMAIL_USER: process.env.EMAIL_USER as string,

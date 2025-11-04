@@ -2,12 +2,14 @@ import { Request, Response } from 'express'
 import ejs from 'ejs'
 import { config } from '@/config'
 import { resolveTemplatePath } from '@/utils/resolveTemplatePath'
-import { transporter } from '@/utils/nodemailer'
 import { AppError } from '@/utils/errors'
 import { validateContactMessage } from '@/schemas/contacts'
 import { verifyCloudflareChallenge } from '@/utils/verifyCloudflareChallenge'
+import { Resend } from 'resend'
 
-const { EMAIL_FROM } = config
+const { EMAIL_FROM, RESEND_API_KEY } = config
+
+const resend = new Resend(RESEND_API_KEY)
 
 export class HomeController {
   sendMessage = async (req: Request, res: Response) => {
@@ -42,8 +44,8 @@ export class HomeController {
         currentYear: new Date().getFullYear(),
       })
 
-      await transporter.sendMail({
-        html,
+      await resend.emails.send({
+        html: html,
         to: EMAIL_FROM,
         replyTo: result.data.email,
         from: `Livline <${EMAIL_FROM}>`,
@@ -52,7 +54,6 @@ export class HomeController {
 
       res.status(200).json({ success: true, message: 'Mensaje enviado correctamente' })
     } catch (error) {
-      console.log(error)
       if (error instanceof AppError) {
         res.status(error.statusCode).json({ error: error.message, statusCode: error.statusCode })
         return

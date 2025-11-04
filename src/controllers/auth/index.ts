@@ -8,9 +8,18 @@ import { AppError, NotFoundError, ValidationError } from '@/utils/errors'
 import { validatePasswords } from '@/utils/validatePasswords'
 import ejs from 'ejs'
 import path from 'path'
-import { transporter } from '@/utils/nodemailer'
+import { Resend } from 'resend'
 
-const { SECRET_JWT_KEY, SECRET_REFRESH_KEY, COOKIE_OPTIONS, FRONTEND_URL, EMAIL_USER } = config
+const {
+  SECRET_JWT_KEY,
+  SECRET_REFRESH_KEY,
+  COOKIE_OPTIONS,
+  FRONTEND_URL,
+  EMAIL_USER,
+  RESEND_API_KEY,
+} = config
+
+const resend = new Resend(RESEND_API_KEY)
 
 const resolveTemplatePath = (relativePath: string) => {
   const basePath = process.env.NODE_ENV === 'production' ? 'build' : 'src'
@@ -118,11 +127,11 @@ export class AuthController {
         currentYear: new Date().getFullYear(),
       })
 
-      await transporter.sendMail({
+      await resend.emails.send({
         from: `Livline <${EMAIL_USER}>`,
         to: user.email,
-        subject: 'Restablecer contraseña',
-        html,
+        subject: `Restablecer contraseña`,
+        html: html,
       })
 
       res.status(200).json({ message: 'Correo electrónico enviado exitosamente' })
