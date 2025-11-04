@@ -3,6 +3,7 @@ import cors from 'cors'
 const ACCEPTED_ORIGINS = [
   'http://localhost:5173',
   'https://liv-line-frontend.vercel.app',
+  'https://www.liv-line-frontend.vercel.app',
   'https://livline.org',
   'https://www.livline.org',
 ]
